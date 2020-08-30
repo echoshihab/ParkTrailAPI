@@ -14,6 +14,8 @@ using Microsoft.Extensions.Logging;
 using ParkApi.Data;
 using ParkApi.Models.Repository;
 using ParkApi.Models.Repository.IRepository;
+using AutoMapper;
+using ParkApi.Models.ParkMapper;
 
 namespace ParkApi
 {
@@ -33,6 +35,7 @@ namespace ParkApi
             options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddScoped<INationalParkRepository, NationalParkRespository>();
+            services.AddAutoMapper(typeof(ParkMappingProfile));
             services.AddControllers();
         }
 

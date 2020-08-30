@@ -15,6 +15,6 @@ namespace ParkApi.Models.Repository.IRepository
         bool CreateNationalPark(NationalPark nationalPark);
         bool UpdateNationalPark(NationalPark nationalPark);
         bool DeleteNationalPark(NationalPark nationalPark);
-        bool Save()
+        bool Save();
     }
 }
