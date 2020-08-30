@@ -12,6 +12,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using ParkApi.Data;
+using ParkApi.Models.Repository;
+using ParkApi.Models.Repository.IRepository;
 
 namespace ParkApi
 {
@@ -29,6 +31,8 @@ namespace ParkApi
         {
             services.AddDbContext<ApplicationDbContext>(options=> 
             options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddScoped<INationalParkRepository, NationalParkRespository>();
             services.AddControllers();
         }
 
