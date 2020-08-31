@@ -33,7 +33,24 @@ namespace ParkApi.Controllers
                 nationalParksDto.Add(_mapper.Map<NationalParkDto>(park));
             }
 
-            return Ok(nationalParks);
+            return Ok(nationalParksDto);
+        }
+
+        [HttpGet("{nationalParkId:int}")]
+        public IActionResult GetNationalPark(int nationalParkId)
+        {
+            var nationalPark = _nationalParkRepository.GetNationalPark(nationalParkId);
+
+            if(nationalPark == null)
+            {
+                return NotFound();
+            }
+
+            var nationalParkDto = _mapper.Map<NationalParkDto>(nationalPark);
+
+            return Ok(nationalParkDto);
+
+
         }
     }
 }
