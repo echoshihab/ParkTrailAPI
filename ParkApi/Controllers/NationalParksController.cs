@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using ParkApi.Models;
 using ParkApi.Models.Dtos;
 using ParkApi.Models.Repository.IRepository;
 
@@ -36,7 +37,7 @@ namespace ParkApi.Controllers
             return Ok(nationalParksDto);
         }
 
-        [HttpGet("{nationalParkId:int}")]
+        [HttpGet("{nationalParkId:int}", Name = "GetNationalPark")]
         public IActionResult GetNationalPark(int nationalParkId)
         {
             var nationalPark = _nationalParkRepository.GetNationalPark(nationalParkId);
@@ -50,6 +51,31 @@ namespace ParkApi.Controllers
 
             return Ok(nationalParkDto);
 
+
+        }
+
+        [HttpPost]
+        public IActionResult CreateNationalPark(NationalParkDto nationalParkDto)
+        {
+            if(nationalParkDto == null)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if(_nationalParkRepository.NationalParkExists(nationalParkDto.Name))
+            {
+                ModelState.AddModelError("", "This Park already exists");
+                return StatusCode(404, ModelState);
+            }
+
+            var nationalParkObj = _mapper.Map<NationalPark>(nationalParkDto);
+
+            if(!_nationalParkRepository.CreateNationalPark(nationalParkObj))
+            {
+                ModelState.AddModelError("", $"Error saving {nationalParkObj.Name}");
+                return StatusCode(500, ModelState);
+            }
+            return CreatedAtRoute("GetNationalPark", new { nationalParkId = nationalParkObj.Id }, nationalParkObj);
 
         }
     }
