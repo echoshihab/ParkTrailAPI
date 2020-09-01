@@ -70,13 +70,42 @@ namespace ParkApi.Controllers
 
             var nationalParkObj = _mapper.Map<NationalPark>(nationalParkDto);
 
+      
+
             if(!_nationalParkRepository.CreateNationalPark(nationalParkObj))
             {
                 ModelState.AddModelError("", $"Error saving {nationalParkObj.Name}");
                 return StatusCode(500, ModelState);
             }
+        
+            //because of savechanges(), we can see nationalparkobj.id because entity framework
+            //by defeault follows each INSERT with SELECT_SCOPE_IDENTITY()
             return CreatedAtRoute("GetNationalPark", new { nationalParkId = nationalParkObj.Id }, nationalParkObj);
 
         }
+
+        [HttpPatch("{nationalParkId:int}", Name = "UpdateNationalPark")]
+        public IActionResult UpdateNationalPark(int nationalParkId, NationalParkDto nationalParkDto)
+        {
+            if (nationalParkDto == null || nationalParkId != nationalParkDto.Id)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var nationalParkObj = _mapper.Map<NationalPark>(nationalParkDto);
+
+
+
+            if (!_nationalParkRepository.UpdateNationalPark(nationalParkObj))
+            {
+                ModelState.AddModelError("", $"Error updating {nationalParkObj.Name}");
+                return StatusCode(500, ModelState);
+            }
+
+            return NoContent();
+
+        }
+
     }
+
 }
