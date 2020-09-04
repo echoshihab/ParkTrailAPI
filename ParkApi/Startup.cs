@@ -36,6 +36,14 @@ namespace ParkApi
 
             services.AddScoped<INationalParkRepository, NationalParkRespository>();
             services.AddAutoMapper(typeof(ParkMappingProfile));
+            services.AddSwaggerGen(options =>
+            {
+                options.SwaggerDoc("ParkTrailOpenAPISpec", new Microsoft.OpenApi.Models.OpenApiInfo()
+                {
+                    Title = "Park Trail API",
+                    Version = "1"
+                });
+            });
             services.AddControllers();
         }
 
@@ -48,7 +56,7 @@ namespace ParkApi
             }
 
             app.UseHttpsRedirection();
-
+            app.UseSwagger();
             app.UseRouting();
 
             app.UseAuthorization();
