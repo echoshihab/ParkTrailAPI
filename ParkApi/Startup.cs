@@ -16,6 +16,8 @@ using ParkApi.Models.Repository;
 using ParkApi.Models.Repository.IRepository;
 using AutoMapper;
 using ParkApi.Models.ParkMapper;
+using System.Reflection;
+using System.IO;
 
 namespace ParkApi
 {
@@ -38,11 +40,14 @@ namespace ParkApi
             services.AddAutoMapper(typeof(ParkMappingProfile));
             services.AddSwaggerGen(options =>
             {
-                options.SwaggerDoc("ParkTrailOpenAPISpec", new Microsoft.OpenApi.Models.OpenApiInfo()
-                {
-                    Title = "Park Trail API",
-                    Version = "1"
-                });
+            options.SwaggerDoc("ParkTrailOpenAPISpec", new Microsoft.OpenApi.Models.OpenApiInfo()
+            {
+                Title = "Park Trail API",
+                Version = "1"
+            });
+            var xmlCommentFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+            var cmlCommentsFullPath = Path.Combine(AppContext.BaseDirectory, xmlCommentFile);
+            options.IncludeXmlComments(cmlCommentsFullPath);
             });
             services.AddControllers();
         }
@@ -57,6 +62,11 @@ namespace ParkApi
 
             app.UseHttpsRedirection();
             app.UseSwagger();
+            app.UseSwaggerUI(options =>
+            {
+                options.SwaggerEndpoint("/swagger/ParkTrailOpenAPISpec/swagger.json", "Park Trail API");
+                options.RoutePrefix = "";
+            });
             app.UseRouting();
 
             app.UseAuthorization();

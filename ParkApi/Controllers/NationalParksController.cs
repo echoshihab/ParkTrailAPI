@@ -15,7 +15,7 @@ namespace ParkApi.Controllers
     [ApiController]
     public class NationalParksController : Controller
     {
-        private INationalParkRepository _nationalParkRepository;
+        private readonly INationalParkRepository _nationalParkRepository;
         private readonly IMapper _mapper;
         public NationalParksController(IMapper mapper, INationalParkRepository  nationalParkRepository)
         {
@@ -23,6 +23,10 @@ namespace ParkApi.Controllers
             _nationalParkRepository = nationalParkRepository;
         }
 
+        /// <summary>
+        /// Get list of national parks
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public IActionResult GetNationalParks()
         {
@@ -37,6 +41,12 @@ namespace ParkApi.Controllers
             return Ok(nationalParksDto);
         }
 
+
+        /// <summary>
+        /// Get individual national park
+        /// </summary>
+        /// <param name="nationalParkId">The Id of the national park</param>
+        /// <returns></returns>
         [HttpGet("{nationalParkId:int}", Name = "GetNationalPark")]
         public IActionResult GetNationalPark(int nationalParkId)
         {
@@ -53,6 +63,11 @@ namespace ParkApi.Controllers
 
 
         }
+        /// <summary>
+        /// Creates a New National Park
+        /// </summary>
+        /// <param name="nationalParkDto">National Park DTO</param>
+        /// <returns></returns>
 
         [HttpPost]
         public IActionResult CreateNationalPark(NationalParkDto nationalParkDto)
@@ -84,6 +99,12 @@ namespace ParkApi.Controllers
 
         }
 
+        /// <summary>
+        /// Updates National Park
+        /// </summary>
+        /// <param name="nationalParkId">Id of National Park</param>
+        /// <param name="nationalParkDto">National Park DTO</param>
+        /// <returns></returns>
         [HttpPatch("{nationalParkId:int}", Name = "UpdateNationalPark")]
         public IActionResult UpdateNationalPark(int nationalParkId, NationalParkDto nationalParkDto)
         {
@@ -106,6 +127,11 @@ namespace ParkApi.Controllers
 
         }
 
+        /// <summary>
+        /// Deletes National Parl
+        /// </summary>
+        /// <param name="nationalParkId">Id of National Park</param>
+        /// <returns></returns>
         [HttpDelete("{nationalParkId:int}", Name = "DeleteNationalPark")]
         public IActionResult DeleteNationalPark(int nationalParkId)
         {
