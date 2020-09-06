@@ -37,6 +37,7 @@ namespace ParkApi
             options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddScoped<INationalParkRepository, NationalParkRespository>();
+            services.AddScoped<ITrailRepository, TrailRespository>();
             services.AddAutoMapper(typeof(ParkMappingProfile));
             services.AddSwaggerGen(options =>
             {
