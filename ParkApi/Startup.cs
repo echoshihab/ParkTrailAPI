@@ -43,7 +43,20 @@ namespace ParkApi
             options.SwaggerDoc("ParkTrailOpenAPISpec", new Microsoft.OpenApi.Models.OpenApiInfo()
             {
                 Title = "Park Trail API",
-                Version = "1"
+                Version = "1",
+                Description="Park Trail API",
+                Contact = new Microsoft.OpenApi.Models.OpenApiContact()
+                {
+                    Email="admin@test.com",
+                    Name="Shihab Khan",
+                    Url=new Uri("https://github.com/echoshihab")
+                },
+                License= new Microsoft.OpenApi.Models.OpenApiLicense()
+                {
+                    Name="MIT License",
+                    Url = new Uri("https://en.wikipedia.org/wiki/MIT_License")
+                }
+
             });
             var xmlCommentFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
             var cmlCommentsFullPath = Path.Combine(AppContext.BaseDirectory, xmlCommentFile);
