@@ -71,6 +71,37 @@ namespace ParkApi.Controllers
 
 
         }
+
+        /// <summary>
+        /// Get individual trail in a National Park
+        /// </summary>
+        /// <param name="nationalParkId">The Id of the National Park</param>
+        /// <returns></returns>
+        [HttpGet("[action]/{nationalParkId:int}")]
+        [ProducesResponseType(200, Type = typeof(TrailDto))]
+        [ProducesResponseType(404)]
+        [ProducesDefaultResponseType]
+        public IActionResult GetTrailInNationalPark(int nationalParkId)
+        {
+            var trailList = _trailRepository.GetTrailsInNationalPark(nationalParkId);
+
+            if (trailList == null)
+            {
+                return NotFound();
+            }
+
+            var trailDtoList = new List<TrailDto>();
+            foreach(var trail in trailList)
+            {
+
+                trailDtoList.Add(_mapper.Map<TrailDto>(trail));
+            }
+            
+
+            return Ok(trailDtoList);
+
+
+        }
         /// <summary>
         /// Creates a New Trail
         /// </summary>
@@ -105,7 +136,7 @@ namespace ParkApi.Controllers
                 return StatusCode(500, ModelState);
             }
         
-            return CreatedAtRoute("GetTrail", new { trailId = trailObj.Id }, trailObj);
+            return CreatedAtRoute("GetTrail", new { version = HttpContext.GetRequestedApiVersion().ToString(), trailId = trailObj.Id }, trailObj);
 
         }
 

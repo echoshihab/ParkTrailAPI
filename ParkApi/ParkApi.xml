@@ -58,6 +58,13 @@
             <param name="trailId">The Id of the trail</param>
             <returns></returns>
         </member>
+        <member name="M:ParkApi.Controllers.TrailsController.GetTrailInNationalPark(System.Int32)">
+            <summary>
+            Get individual trail in a National Park
+            </summary>
+            <param name="nationalParkId">The Id of the National Park</param>
+            <returns></returns>
+        </member>
         <member name="M:ParkApi.Controllers.TrailsController.CreateTrail(ParkApi.Models.Dtos.TrailCreateDto)">
             <summary>
             Creates a New Trail
