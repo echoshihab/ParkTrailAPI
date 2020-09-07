@@ -11,9 +11,10 @@ using ParkApi.Models.Repository.IRepository;
 
 namespace ParkApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v{version:apiVersion}/nationalParks")]
+    //[Route("api/[controller]")]
     [ApiController]
-    [ApiExplorerSettings(GroupName = "ParkNPAPISpec")]
+    //[ApiExplorerSettings(GroupName = "ParkNPAPISpec")]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public class NationalParksController : Controller
     {
@@ -106,7 +107,7 @@ namespace ParkApi.Controllers
         
             //because of savechanges(), we can see nationalparkobj.id because entity framework
             //by defeault follows each INSERT with SELECT_SCOPE_IDENTITY()
-            return CreatedAtRoute("GetNationalPark", new { nationalParkId = nationalParkObj.Id }, nationalParkObj);
+            return CreatedAtRoute("GetNationalPark", new { version=HttpContext.GetRequestedApiVersion().ToString(), ,nationalParkId = nationalParkObj.Id }, nationalParkObj);
 
         }
 

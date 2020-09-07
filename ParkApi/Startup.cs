@@ -18,6 +18,9 @@ using AutoMapper;
 using ParkApi.Models.ParkMapper;
 using System.Reflection;
 using System.IO;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
+using Microsoft.Extensions.Options;
+using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace ParkApi
 {
@@ -39,54 +42,47 @@ namespace ParkApi
             services.AddScoped<INationalParkRepository, NationalParkRespository>();
             services.AddScoped<ITrailRepository, TrailRespository>();
             services.AddAutoMapper(typeof(ParkMappingProfile));
-            services.AddSwaggerGen(options =>
+            services.AddApiVersioning(options =>
             {
-            options.SwaggerDoc("ParkNPAPISpec", new Microsoft.OpenApi.Models.OpenApiInfo()
-            {
-                Title = "Park API (National Parks)",
-                Version = "1",
-                Description= "Park API (National Parks)",
-                Contact = new Microsoft.OpenApi.Models.OpenApiContact()
-                {
-                    Email="admin@test.com",
-                    Name="Shihab Khan",
-                    Url=new Uri("https://github.com/echoshihab")
-                },
-                License= new Microsoft.OpenApi.Models.OpenApiLicense()
-                {
-                    Name="MIT License",
-                    Url = new Uri("https://en.wikipedia.org/wiki/MIT_License")
-                }
-
+                options.AssumeDefaultVersionWhenUnspecified = true;
+                options.DefaultApiVersion = new ApiVersion(1, 0);
+                options.ReportApiVersions = true;
             });
-                options.SwaggerDoc("ParkTrailAPISpec", new Microsoft.OpenApi.Models.OpenApiInfo()
-                {
-                    Title = "Park API (Trails)",
-                    Version = "1",
-                    Description = "Park API (Trails)",
-                    Contact = new Microsoft.OpenApi.Models.OpenApiContact()
-                    {
-                        Email = "admin@test.com",
-                        Name = "Shihab Khan",
-                        Url = new Uri("https://github.com/echoshihab")
-                    },
-                    License = new Microsoft.OpenApi.Models.OpenApiLicense()
-                    {
-                        Name = "MIT License",
-                        Url = new Uri("https://en.wikipedia.org/wiki/MIT_License")
-                    }
+            services.AddVersionedApiExplorer(options => options.GroupNameFormat = "'v'VVV");
+            services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
+            services.AddSwaggerGen();
 
-                });
+            //services.AddSwaggerGen(options =>
+            //{
+            //options.SwaggerDoc("ParkTrailAPISpec", new Microsoft.OpenApi.Models.OpenApiInfo()
+            //{
+            //    Title = "Park Trails API",
+            //    Version = "1",
+            //    Description= "Park Trails API",
+            //    Contact = new Microsoft.OpenApi.Models.OpenApiContact()
+            //    {
+            //        Email="admin@test.com",
+            //        Name="Shihab Khan",
+            //        Url=new Uri("https://github.com/echoshihab")
+            //    },
+            //    License= new Microsoft.OpenApi.Models.OpenApiLicense()
+            //    {
+            //        Name="MIT License",
+            //        Url = new Uri("https://en.wikipedia.org/wiki/MIT_License")
+            //    }
 
-                var xmlCommentFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-            var cmlCommentsFullPath = Path.Combine(AppContext.BaseDirectory, xmlCommentFile);
-            options.IncludeXmlComments(cmlCommentsFullPath);
-            });
+            //});
+           
+
+            //    var xmlCommentFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+            //var cmlCommentsFullPath = Path.Combine(AppContext.BaseDirectory, xmlCommentFile);
+            //options.IncludeXmlComments(cmlCommentsFullPath);
+            //});
             services.AddControllers();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IApiVersionDescriptionProvider provider)
         {
             if (env.IsDevelopment())
             {
@@ -97,10 +93,20 @@ namespace ParkApi
             app.UseSwagger();
             app.UseSwaggerUI(options =>
             {
-                options.SwaggerEndpoint("/swagger/ParkNPAPISpec/swagger.json", "Park API (National Parks)");
-                options.SwaggerEndpoint("/swagger/ParkTrailAPISpec/swagger.json", "Park API (Trails)");
+                foreach (var desc in provider.ApiVersionDescriptions)
+                {
+                 options.SwaggerEndpoint($"/swagger/{desc.GroupName}/swagger.json",
+                 desc.GroupName.ToUpperInvariant());
+                }
                 options.RoutePrefix = "";
+
             });
+            //app.UseSwaggerUI(options =>
+            //{
+            //    //options.SwaggerEndpoint("/swagger/ParkNPAPISpec/swagger.json", "Park API (National Parks)");
+            //    options.SwaggerEndpoint("/swagger/ParkTrailAPISpec/swagger.json", "Park Trails API");
+            //    options.RoutePrefix = "";
+            //});
             app.UseRouting();
 
             app.UseAuthorization();

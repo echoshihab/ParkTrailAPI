@@ -11,9 +11,10 @@ using ParkApi.Models.Repository.IRepository;
 
 namespace ParkApi.Controllers
 {
-    [Route("api/[controller]")]
+    //[Route("api/[controller]")]
+    [Route("api/v{version:apiVersion}/trails")]
     [ApiController]
-    [ApiExplorerSettings(GroupName = "ParkTrailAPISpec")]
+    //[ApiExplorerSettings(GroupName = "ParkTrailAPISpec")]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public class TrailsController : Controller
     {
