@@ -41,11 +41,11 @@ namespace ParkApi
             services.AddAutoMapper(typeof(ParkMappingProfile));
             services.AddSwaggerGen(options =>
             {
-            options.SwaggerDoc("ParkTrailOpenAPISpec", new Microsoft.OpenApi.Models.OpenApiInfo()
+            options.SwaggerDoc("ParkNPAPISpec", new Microsoft.OpenApi.Models.OpenApiInfo()
             {
-                Title = "Park Trail API",
+                Title = "Park API (National Parks)",
                 Version = "1",
-                Description="Park Trail API",
+                Description= "Park API (National Parks)",
                 Contact = new Microsoft.OpenApi.Models.OpenApiContact()
                 {
                     Email="admin@test.com",
@@ -59,7 +59,26 @@ namespace ParkApi
                 }
 
             });
-            var xmlCommentFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                options.SwaggerDoc("ParkTrailAPISpec", new Microsoft.OpenApi.Models.OpenApiInfo()
+                {
+                    Title = "Park API (Trails)",
+                    Version = "1",
+                    Description = "Park API (Trails)",
+                    Contact = new Microsoft.OpenApi.Models.OpenApiContact()
+                    {
+                        Email = "admin@test.com",
+                        Name = "Shihab Khan",
+                        Url = new Uri("https://github.com/echoshihab")
+                    },
+                    License = new Microsoft.OpenApi.Models.OpenApiLicense()
+                    {
+                        Name = "MIT License",
+                        Url = new Uri("https://en.wikipedia.org/wiki/MIT_License")
+                    }
+
+                });
+
+                var xmlCommentFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
             var cmlCommentsFullPath = Path.Combine(AppContext.BaseDirectory, xmlCommentFile);
             options.IncludeXmlComments(cmlCommentsFullPath);
             });
@@ -78,7 +97,8 @@ namespace ParkApi
             app.UseSwagger();
             app.UseSwaggerUI(options =>
             {
-                options.SwaggerEndpoint("/swagger/ParkTrailOpenAPISpec/swagger.json", "Park Trail API");
+                options.SwaggerEndpoint("/swagger/ParkNPAPISpec/swagger.json", "Park API (National Parks)");
+                options.SwaggerEndpoint("/swagger/ParkTrailAPISpec/swagger.json", "Park API (Trails)");
                 options.RoutePrefix = "";
             });
             app.UseRouting();
