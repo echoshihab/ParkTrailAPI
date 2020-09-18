@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ParkConsumer.Repository.IRepository
 {
-    interface ITrailRepository: IRepository<Trail>
+    public interface ITrailRepository: IRepository<Trail>
     {
     }
 }

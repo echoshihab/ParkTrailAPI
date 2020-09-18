@@ -16,5 +16,7 @@ namespace ParkConsumer.Repository
         {
             _clientFactory = clientFactory;
         }
+
+      
     }
 }
