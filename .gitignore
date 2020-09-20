@@ -347,4 +347,4 @@ healthchecksdb
 *.jpg
 
 #build files
-wwwroot/
+lib/
