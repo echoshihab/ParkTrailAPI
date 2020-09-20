@@ -62,14 +62,15 @@ namespace ParkConsumer.Repository
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
                 var jsonString = await response.Content.ReadAsStringAsync();
-                return JsonConvert.DeserializeObject<IEnumerable<T>>(jsonString);
+                var convertedOBj = JsonConvert.DeserializeObject<IEnumerable<T>>(jsonString);
+                return convertedOBj;
             }
             return null;
         }
 
         public async Task<T> GetAsync(string url, int Id)
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, url);
+            var request = new HttpRequestMessage(HttpMethod.Get, url+Id);
             var client = _clientFactory.CreateClient();
             HttpResponseMessage response = await client.SendAsync(request);
             if (response.StatusCode == System.Net.HttpStatusCode.OK)

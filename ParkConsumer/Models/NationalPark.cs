@@ -8,7 +8,7 @@ namespace ParkConsumer.Models
 {
     public class NationalPark
     {
-
+        public int Id { get; set; }
         [Required]
         public string Name { get; set; }
         [Required]
