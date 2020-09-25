@@ -86,5 +86,18 @@ namespace ParkConsumer.Controllers
             return Json(new { data });
         }
 
+        [HttpDelete]
+        public async Task<IActionResult> Delete(int id)
+        {
+
+            var status = await _nationalParkRepository.DeleteAsync(SD.NationalParkAPIPath, id);
+            if (status)
+            {
+                return Json(new { success = true, message = "Delete Successful" });
+
+            }
+            return Json(new { success = false, message = "Delete Not Successful" });
+            
+        }
     }
 }
