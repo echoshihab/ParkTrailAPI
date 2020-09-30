@@ -58,36 +58,18 @@ namespace ParkConsumer.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Upsert(NationalPark obj)
+        public async Task<IActionResult> Upsert(TrailsVM obj)
         {
             if(ModelState.IsValid)
             {
-                var files = HttpContext.Request.Form.Files;
-
-                if (files.Count > 0)
+               
+                if(obj.Trail.Id == 0)
                 {
-                    byte[] p1 = null;
-                    using (var fs1 = files[0].OpenReadStream())
-                    {
-                        using var ms1 = new MemoryStream();
-                        fs1.CopyTo(ms1);
-                        p1 = ms1.ToArray();
-                    }
-
-                    obj.Picture = p1;
+                    await _trailRepository.CreateAsync(SD.TrailAPIPath, obj.Trail);
                 }
                 else
                 {
-                    var objFromDb = await _nationalParkRepository.GetAsync(SD.NationalParkAPIPath, obj.Id);
-                    obj.Picture = objFromDb.Picture;
-                }
-                if(obj.Id == 0)
-                {
-                    await _nationalParkRepository.CreateAsync(SD.NationalParkAPIPath, obj);
-                }
-                else
-                {
-                    await _nationalParkRepository.UpdateAsync(SD.NationalParkAPIPath+obj.Id, obj);
+                    await _trailRepository.UpdateAsync(SD.TrailAPIPath + obj.Trail.Id, obj.Trail);
                 }
                 return RedirectToAction(nameof(Index));
             }
@@ -98,9 +80,9 @@ namespace ParkConsumer.Controllers
         }
 
 
-        public async Task<IActionResult> GetAllNationalPark()
+        public async Task<IActionResult> GetAllTrail()
         {
-            var data = await _nationalParkRepository.GetAllAsync(SD.NationalParkAPIPath);
+            var data = await _trailRepository.GetAllAsync(SD.TrailAPIPath);
             return Json(new { data });
         }
 
@@ -108,7 +90,7 @@ namespace ParkConsumer.Controllers
         public async Task<IActionResult> Delete(int id)
         {
 
-            var status = await _nationalParkRepository.DeleteAsync(SD.NationalParkAPIPath, id);
+            var status = await _trailRepository.DeleteAsync(SD.TrailAPIPath, id);
             if (status)
             {
                 return Json(new { success = true, message = "Delete Successful" });
