@@ -37,7 +37,8 @@ namespace ParkConsumer.Controllers
                 {
                     Text = i.Name,
                     Value = i.Id.ToString()
-                })
+                }),
+                Trail = new Trail()
 
             };
 
@@ -75,7 +76,18 @@ namespace ParkConsumer.Controllers
             }
             else
             {
-                return View(obj);
+                IEnumerable<NationalPark> npList = await _nationalParkRepository.GetAllAsync(SD.NationalParkAPIPath);
+                TrailsVM objVM = new TrailsVM()
+                {
+                    NationalParkList = npList.Select(i => new SelectListItem
+                    {
+                        Text = i.Name,
+                        Value = i.Id.ToString()
+                    }),
+                    Trail = obj.Trail
+
+                };
+                return View(objVM);
             }
         }
 
