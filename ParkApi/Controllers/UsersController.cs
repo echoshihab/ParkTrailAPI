@@ -35,6 +35,28 @@ namespace ParkApi.Controllers
             }
             return Ok(user);
         }
+
+
+        [AllowAnonymous]
+        [HttpPost]
+        public IActionResult Register([FromBody] User model)
+        {
+            bool ifUserNameUnique = _userRepository.isUniqueUser(model.UserName);
+            if(!ifUserNameUnique)
+            {
+                return BadRequest(new { message = "Username already exists" });
+
+            }
+
+            var user = _userRepository.Register(model.UserName, model.Password);
+
+            if(user == null)
+            {
+                return BadRequest(new { message = "Error while registering" });
+            }
+
+            return Ok();
+        }
     }
 
 }
