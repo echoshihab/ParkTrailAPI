@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ParkApi.Models;
@@ -56,6 +57,7 @@ namespace ParkApi.Controllers
         [ProducesResponseType(200, Type = typeof(TrailDto))]
         [ProducesResponseType(404)]
         [ProducesDefaultResponseType]
+        [Authorize(Roles="Admin")]
         public IActionResult GetTrail(int trailId)
         {
             var trail = _trailRepository.GetTrail(trailId);

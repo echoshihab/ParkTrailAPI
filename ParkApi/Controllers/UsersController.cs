@@ -38,7 +38,7 @@ namespace ParkApi.Controllers
 
 
         [AllowAnonymous]
-        [HttpPost]
+        [HttpPost("register")]
         public IActionResult Register([FromBody] User model)
         {
             bool ifUserNameUnique = _userRepository.isUniqueUser(model.UserName);
