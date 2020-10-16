@@ -31,8 +31,8 @@ namespace ParkConsumer.Controllers
         {
             IndexVM parksAndTrails = new IndexVM()
             {
-                NationalParks = await _nationalParkRepository.GetAllAsync(SD.NationalParkAPIPath),
-                Trails = await _trailRepository.GetAllAsync(SD.TrailAPIPath),
+                NationalParks = await _nationalParkRepository.GetAllAsync(SD.NationalParkAPIPath, HttpContext.Session.GetString("JWToken")),
+                Trails = await _trailRepository.GetAllAsync(SD.TrailAPIPath, HttpContext.Session.GetString("JWToken")),
             };
            return View(parksAndTrails);
         }
